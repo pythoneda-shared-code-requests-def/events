@@ -19,11 +19,11 @@
 {
   description = "Events relevant to code requests";
   inputs = rec {
-    nixos.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils/v1.0.0";
+    nixos.url = "github:NixOS/nixpkgs/nixos-23.05";
     pythoneda-shared-artifact-changes-shared = {
       url =
-        "github:pythoneda-shared-artifact-changes/shared-artifact/0.0.1a15?dir=shared";
+        "github:pythoneda-shared-artifact-changes/shared-artifact/0.0.2?dir=shared";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
       inputs.pythoneda-shared-pythoneda-banner.follows =
@@ -33,7 +33,17 @@
     };
     pythoneda-shared-code-requests-shared = {
       url =
-        "github:pythoneda-shared-code-requests/shared-artifact/0.0.1a11?dir=shared";
+        "github:pythoneda-shared-code-requests/shared-artifact/0.0.2?dir=shared";
+      inputs.nixos.follows = "nixos";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.pythoneda-shared-pythoneda-banner.follows =
+        "pythoneda-shared-pythoneda-banner";
+      inputs.pythoneda-shared-pythoneda-domain.follows =
+        "pythoneda-shared-pythoneda-domain";
+    };
+    pythoneda-shared-nix-flake-shared = {
+      url =
+        "github:pythoneda-shared-nix-flake/shared-artifact/0.0.2?dir=shared";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
       inputs.pythoneda-shared-pythoneda-banner.follows =
@@ -42,13 +52,13 @@
         "pythoneda-shared-pythoneda-domain";
     };
     pythoneda-shared-pythoneda-banner = {
-      url = "github:pythoneda-shared-pythoneda/banner/0.0.1a17";
+      url = "github:pythoneda-shared-pythoneda/banner/0.0.2";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
     };
     pythoneda-shared-pythoneda-domain = {
       url =
-        "github:pythoneda-shared-pythoneda/domain-artifact/0.0.1a43?dir=domain";
+        "github:pythoneda-shared-pythoneda/domain-artifact/0.0.2?dir=domain";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
       inputs.pythoneda-shared-pythoneda-banner.follows =
@@ -61,7 +71,7 @@
       let
         org = "pythoneda-shared-code-requests";
         repo = "events";
-        version = "0.0.1a8";
+        version = "0.0.2";
         sha256 = "sha256-NTA1BAzz3vesFIMkXWDGQln+Dl59FviP7xNCiGtO6Nc=";
         pname = "${org}-${repo}";
         pythonpackage = "pythoneda.shared.code_requests.events";
@@ -80,7 +90,8 @@
         pythoneda-shared-code-requests-events-for = { python
           , pythoneda-shared-artifact-changes-shared
           , pythoneda-shared-code-requests-shared
-          , pythoneda-shared-pythoneda-domain }:
+          , pythoneda-shared-nix-flake-shared, pythoneda-shared-pythoneda-domain
+          }:
           let
             pnameWithUnderscores =
               builtins.replaceStrings [ "-" ] [ "_" ] pname;
@@ -105,6 +116,8 @@
                 pythoneda-shared-artifact-changes-shared.version;
               pythonedaSharedCodeRequestsSharedVersion =
                 pythoneda-shared-code-requests-shared.version;
+              pythonedaSharedNixFlakeSharedVersion =
+                pythoneda-shared-nix-flake-shared.version;
               pythonedaSharedPythonedaDomainVersion =
                 pythoneda-shared-pythoneda-domain.version;
               src = pyprojectTemplateFile;
@@ -121,6 +134,7 @@
             propagatedBuildInputs = with python.pkgs; [
               pythoneda-shared-artifact-changes-shared
               pythoneda-shared-code-requests-shared
+              pythoneda-shared-nix-flake-shared
               pythoneda-shared-pythoneda-domain
             ];
 
@@ -250,6 +264,8 @@
                 pythoneda-shared-artifact-changes-shared.packages.${system}.pythoneda-shared-artifact-changes-shared-python38;
               pythoneda-shared-code-requests-shared =
                 pythoneda-shared-code-requests-shared.packages.${system}.pythoneda-shared-code-requests-shared-python38;
+              pythoneda-shared-nix-flake-shared =
+                pythoneda-shared-nix-flake-shared.packages.${system}.pythoneda-shared-nix-flake-shared-python38;
               pythoneda-shared-pythoneda-domain =
                 pythoneda-shared-pythoneda-domain.packages.${system}.pythoneda-shared-pythoneda-domain-python38;
             };
@@ -260,6 +276,8 @@
                 pythoneda-shared-artifact-changes-shared.packages.${system}.pythoneda-shared-artifact-changes-shared-python39;
               pythoneda-shared-code-requests-shared =
                 pythoneda-shared-code-requests-shared.packages.${system}.pythoneda-shared-code-requests-shared-python39;
+              pythoneda-shared-nix-flake-shared =
+                pythoneda-shared-nix-flake-shared.packages.${system}.pythoneda-shared-nix-flake-shared-python39;
               pythoneda-shared-pythoneda-domain =
                 pythoneda-shared-pythoneda-domain.packages.${system}.pythoneda-shared-pythoneda-domain-python39;
             };
@@ -270,6 +288,8 @@
                 pythoneda-shared-artifact-changes-shared.packages.${system}.pythoneda-shared-artifact-changes-shared-python310;
               pythoneda-shared-code-requests-shared =
                 pythoneda-shared-code-requests-shared.packages.${system}.pythoneda-shared-code-requests-shared-python310;
+              pythoneda-shared-nix-flake-shared =
+                pythoneda-shared-nix-flake-shared.packages.${system}.pythoneda-shared-nix-flake-shared-python310;
               pythoneda-shared-pythoneda-domain =
                 pythoneda-shared-pythoneda-domain.packages.${system}.pythoneda-shared-pythoneda-domain-python310;
             };
@@ -280,6 +300,8 @@
                 pythoneda-shared-artifact-changes-shared.packages.${system}.pythoneda-shared-artifact-changes-shared-python311;
               pythoneda-shared-code-requests-shared =
                 pythoneda-shared-code-requests-shared.packages.${system}.pythoneda-shared-code-requests-shared-python311;
+              pythoneda-shared-nix-flake-shared =
+                pythoneda-shared-nix-flake-shared.packages.${system}.pythoneda-shared-nix-flake-shared-python311;
               pythoneda-shared-pythoneda-domain =
                 pythoneda-shared-pythoneda-domain.packages.${system}.pythoneda-shared-pythoneda-domain-python311;
             };
